@@ -1,8 +1,8 @@
-package tp.pr3.control;
+package tp.pr4.control;
 
-import tp.pr3.logic.Counter;
-import tp.pr3.logic.GameRules;
-import tp.pr3.logic.Move;
+import tp.pr4.logic.Counter;
+import tp.pr4.logic.GameRules;
+import tp.pr4.logic.Move;
 
 public interface GameTypeFactory {
 	

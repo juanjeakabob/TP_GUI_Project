@@ -1,10 +1,10 @@
-package tp.pr3.control;
+package tp.pr4.control;
 
 import java.util.Scanner;
 
 
-import tp.pr3.logic.*;
-import tp.pr3.logic.Game;
+import tp.pr4.logic.*;
+import tp.pr4.logic.Game;
 
 
 public class Controller {

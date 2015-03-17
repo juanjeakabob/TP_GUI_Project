@@ -1,7 +1,7 @@
-package tp.pr3;
+package tp.pr4;
 
-import tp.pr3.control.*;
-import tp.pr3.logic.*;
+import tp.pr4.control.*;
+import tp.pr4.logic.*;
 
 import java.util.Scanner;
 

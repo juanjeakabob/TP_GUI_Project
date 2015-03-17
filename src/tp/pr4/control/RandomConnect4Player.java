@@ -1,11 +1,11 @@
-package tp.pr3.control;
+package tp.pr4.control;
 
 import java.util.Random;
 
-import tp.pr3.logic.Board;
-import tp.pr3.logic.Connect4Move;
-import tp.pr3.logic.Counter;
-import tp.pr3.logic.Move;
+import tp.pr4.logic.Board;
+import tp.pr4.logic.Connect4Move;
+import tp.pr4.logic.Counter;
+import tp.pr4.logic.Move;
 
 public class RandomConnect4Player implements Player{
 	
