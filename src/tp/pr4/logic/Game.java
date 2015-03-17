@@ -77,13 +77,7 @@ public class Game {
 		
 		System.out.println("Game restarted");
 	}
-	
-	//Print into the screen the board
-	public void printBoard()
-	{
-		System.out.println(mBoard);
-	}
-	
+
 	//Goes to the next turn
 	public void nextTurn()
 	{
@@ -113,15 +107,11 @@ public class Game {
 				
 				if(mRules.winningMove(mLastMove, mBoard) != Counter.EMPTY) //If we have a winner exit
 				{
-					printBoard();
-					System.out.println("Game over. " + mTurn + " wins");
 					mWinner = mLastMove.getPlayer();
 					setFinished(true);
 				}
 				else if(mRules.isDraw(mLastMove.getPlayer(), mBoard)) //If the board full is a draw, exit
 				{
-					printBoard();
-					System.out.println("Game over. Game ended in a draw" );
 					mWinner = Counter.EMPTY; //No winner
 					setFinished(true);
 				}

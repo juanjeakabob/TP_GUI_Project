@@ -3,8 +3,11 @@ package tp.pr4.control;
 import java.util.Scanner;
 
 
+
+
+
+
 import tp.pr4.logic.*;
-import tp.pr4.logic.Game;
 
 
 public class Controller {
@@ -33,7 +36,7 @@ public class Controller {
 		while(!mGame.isFinished())
 		{
 			//Print the board
-			mGame.printBoard();
+			printBoard(mGame.getBoard());
 			//Show the menu and wait for input
 			showMenu();
 		}
@@ -227,6 +230,18 @@ public class Controller {
 		try
 		{
 			mGame.executeMove(newMove);
+			
+			if(mGame.getWinner() != Counter.EMPTY)
+			{
+				printBoard(mGame.getBoard());
+				System.out.println("Game over. " + mGame.getTurn() + " wins");
+			}
+			else if(mGame.isFinished())
+			{
+				printBoard(mGame.getBoard());
+				System.out.println("Game over. Game ended in a draw" );
+			}
+			
 		}catch(InvalidMove e)
 		{
 			System.err.println(e.getMessage());
@@ -246,5 +261,11 @@ public class Controller {
 		System.out.println("EXIT: exit the application.");
 		System.out.println("HELP: show this help.");
 		System.out.println();
+	}
+	
+	//Print into the screen the board
+	void printBoard(Board mGame)
+	{
+		System.out.println(mGame);
 	}
 }
