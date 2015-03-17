@@ -10,7 +10,7 @@ public enum Counter
 		this.name = name;
 	}
 	
-	public String toStrting() {
+	public String toString() {
 		return name;
 	}
 	
