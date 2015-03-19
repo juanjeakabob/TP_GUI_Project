@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Main {
 	
-	//True if the user asked for help through an argument
+	//Set to true if user asked for help by argument
 	static private boolean helpDisplayed;
 	
 	public static void main(String[] args) {
