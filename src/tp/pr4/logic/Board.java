@@ -1,6 +1,6 @@
 package tp.pr4.logic;
 
-public class Board {
+public class Board implements ReadOnlyBoard {
 
 	//Private variables
 	private Counter[][] mBoard; //Game board, it will be mWidth x mHeight

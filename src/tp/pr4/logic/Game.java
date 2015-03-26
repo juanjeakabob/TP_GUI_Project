@@ -1,8 +1,9 @@
 package tp.pr4.logic;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
-public class Game {
+public class Game implements Observable<GameObserver>{
 	
 	//Private variables
 	private Board mBoard;
@@ -15,6 +16,9 @@ public class Game {
 	//Undo stack
 	private Stack<Move> mUndoStack;
 	
+	//Oberservers list
+	private ArrayList<GameObserver> mObserversList;
+	
 	public Game(GameRules rules)
 	{
 		mBoard = rules.newBoard();
@@ -22,7 +26,8 @@ public class Game {
 		mTurn = rules.initialPlayer();
 		
 		mUndoStack = new Stack<Move>();
-		mUndoStack.removeAllElements();
+		
+		mObserversList = new ArrayList<GameObserver>();
 		
 		mRules = rules;
 	}
@@ -97,30 +102,52 @@ public class Game {
 		}
 		else
 		{
-			 	//Do the move (if valid)
-				move.executeMove(mBoard);
+			//Notify the start of a move
+			for(GameObserver o: mObserversList)
+			{
+				o.moveExecStart(mTurn);
+			}
+			
+		 	//Do the move (if valid)
+			move.executeMove(mBoard);
+			
+			//Add the move to the stack
+			mUndoStack.push(move);
+			
+			mLastMove = move;
+			
+			//Notify the start of a move
+			for(GameObserver o: mObserversList)
+			{
+				o.moveExecFinished(mBoard, mTurn,  mRules.nextTurn(mTurn, mBoard));
+			}
+			
+			if(mRules.winningMove(mLastMove, mBoard) != Counter.EMPTY) //If we have a winner exit
+			{
+				mWinner = mLastMove.getPlayer();
+				setFinished(true);
 				
-				//Add the move to the stack
-				mUndoStack.push(move);
-				
-				mLastMove = move;
-				
-				if(mRules.winningMove(mLastMove, mBoard) != Counter.EMPTY) //If we have a winner exit
+				for(GameObserver o: mObserversList)
 				{
-					mWinner = mLastMove.getPlayer();
-					setFinished(true);
-				}
-				else if(mRules.isDraw(mLastMove.getPlayer(), mBoard)) //If the board full is a draw, exit
-				{
-					mWinner = Counter.EMPTY; //No winner
-					setFinished(true);
-				}
-				else
-				{
-					//If we haven't finish yet go to the next turn.
-					nextTurn();
+					o.onGameOver(mBoard, mWinner);
 				}
 			}
+			else if(mRules.isDraw(mLastMove.getPlayer(), mBoard)) //If the board full is a draw, exit
+			{
+				mWinner = Counter.EMPTY; //No winner
+				setFinished(true);
+				
+				for(GameObserver o: mObserversList)
+				{
+					o.onGameOver(mBoard, mWinner);
+				}
+			}
+			else
+			{
+				//If we haven't finish yet go to the next turn.
+				nextTurn();
+			}
+		}
 	}
 	
 	//Undo the last movement, false if there is no movement to undo
@@ -132,6 +159,12 @@ public class Game {
 		if(mUndoStack.empty())
 		{
 			correctUndo = false;
+			
+			//Notify undo fail
+			for(GameObserver o: mObserversList)
+			{
+				o.onUndoNotPossible();
+			}
 		}
 		else
 		{
@@ -139,10 +172,30 @@ public class Game {
 			
 			nextTurn(); //After undo the turn should change
 			
+			//Notify correct undo
+			for(GameObserver o: mObserversList)
+			{
+				o.onUndo(mBoard, getTurn(), true);
+			}
+			
 			correctUndo = true;
 		}
 		
 		return correctUndo;
 	}
+
+
+	@Override
+	public void addObserver(GameObserver o) {
+		mObserversList.add(o);	
+	}
+
+
+	@Override
+	public void removeObserver(GameObserver o) {
+		mObserversList.remove(o);		
+	}
+	
+	
 
 }
