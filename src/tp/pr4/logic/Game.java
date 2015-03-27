@@ -80,7 +80,11 @@ public class Game implements Observable<GameObserver>{
 		
 		mUndoStack.removeAllElements();
 		
-		System.out.println("Game restarted");
+		//Notify the reset
+		for(GameObserver o: mObserversList)
+		{
+			o.reset(mBoard, mTurn, false);
+		}
 	}
 
 	//Goes to the next turn
@@ -187,13 +191,24 @@ public class Game implements Observable<GameObserver>{
 
 	@Override
 	public void addObserver(GameObserver o) {
-		mObserversList.add(o);	
+		mObserversList.add(o);
+		
+		reset(mRules);
 	}
 
 
 	@Override
 	public void removeObserver(GameObserver o) {
 		mObserversList.remove(o);		
+	}
+	
+	//Notify all the observers about the error
+	public void moveErrorTriggered(String msg)
+	{
+		for(GameObserver o: mObserversList)
+		{
+			o.onMoveError(msg);
+		}
 	}
 	
 	

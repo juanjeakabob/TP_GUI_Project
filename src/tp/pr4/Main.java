@@ -24,7 +24,7 @@ public class Main {
 		{
 			//Default
 			GameTypeFactory c4Fact = new Connect4Factory();
-			control = new Controller(c4Fact, new Game(c4Fact.createRules()), new Scanner(System.in));
+			control = new ConsoleController(c4Fact, new Game(c4Fact.createRules()));
 		}
 		
 		//Run the game until the user exit or the game finish
@@ -92,7 +92,7 @@ public class Main {
 			else
 			{
 				GameTypeFactory c4Fact = new Connect4Factory();
-				control = new Controller(c4Fact, new Game(c4Fact.createRules()), new Scanner(System.in));
+				control = new ConsoleController(c4Fact, new Game(c4Fact.createRules()));
 			}
 			break;
 		case "co":
@@ -104,7 +104,7 @@ public class Main {
 			else
 			{
 				GameTypeFactory coFact = new ComplicaFactory();
-				control = new Controller(coFact, new Game(coFact.createRules()), new Scanner(System.in));
+				control = new ConsoleController(coFact, new Game(coFact.createRules()));
 			}
 			break;
 		case "gr":
@@ -125,7 +125,7 @@ public class Main {
 						y = Integer.parseInt(args[5]);
 						
 						GravityFactory grFact = new GravityFactory(x, y);
-						control = new Controller(grFact, new Game(grFact.createRules()), new Scanner(System.in));
+						control = new ConsoleController(grFact, new Game(grFact.createRules()));
 					}
 				}
 				else

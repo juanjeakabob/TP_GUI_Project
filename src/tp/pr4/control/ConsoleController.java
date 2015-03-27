@@ -2,6 +2,7 @@ package tp.pr4.control;
 
 import java.util.Scanner;
 
+import tp.pr4.logic.Counter;
 import tp.pr4.logic.Game;
 import tp.pr4.views.console.ConsoleView;
 
@@ -16,6 +17,8 @@ public class ConsoleController extends Controller {
 	{
 		mGame = g;
 		mGameFactory = factory;
+		
+		in = new Scanner(System.in);
 		
 		mWhitePlayer = mGameFactory.createHumanPlayerAtConsole(in);
 		mBlackPlayer = mGameFactory.createHumanPlayerAtConsole(in); 
@@ -198,17 +201,20 @@ public class ConsoleController extends Controller {
 		System.out.println();
 	}
 	
+	public void showMenu(Counter turn)
+	{
+		System.out.print("Please enter a command: ");
+	}
+	
 	public void run()
 	{
 		ConsoleView mView = new ConsoleView(mGame, this);
 		
 		//Run until the game is finished
 		while(!mGame.isFinished())
-		{
-			//Print the board
-			mView.printBoard(mGame.getBoard());
+		{			
 			//Show the menu and wait for input
-			mView.showMenu(mGame.getTurn());
+			showMenu(mGame.getTurn());
 			
 			String command = in.nextLine();
 			handleCommand(command); //Handle the user input

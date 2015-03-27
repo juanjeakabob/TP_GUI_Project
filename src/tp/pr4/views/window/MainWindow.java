@@ -1,17 +1,14 @@
 package tp.pr4.views.window;
 
-import tp.pr4.logic.Counter;
-import tp.pr4.logic.GameObserver;
-import tp.pr4.logic.ReadOnlyBoard;
-import tp.pr4.views.console.ConsoleController;
-import tp.pr4.views.console.Observable;
+import tp.pr4.logic.*;
+import tp.pr4.control.WindowController;;
 
 public class MainWindow implements GameObserver {
 	
-	private ConsoleController mConsoleController;
+	private WindowController mConsoleController;
 	private Observable<GameObserver> mGame;
 	
-	public MainWindow(Observable<GameObserver> g, ConsoleController c)
+	public MainWindow(Observable<GameObserver> g, WindowController c)
 	{
 		mGame = g;
 		mConsoleController = c;
@@ -37,7 +34,7 @@ public class MainWindow implements GameObserver {
 	}
 
 	@Override
-	public void onMoveError() {
+	public void onMoveError(String msg) {
 		// TODO Auto-generated method stub
 
 	}

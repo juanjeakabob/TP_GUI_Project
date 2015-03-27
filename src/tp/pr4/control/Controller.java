@@ -50,7 +50,7 @@ public abstract class Controller {
 			
 		}catch(InvalidMove e)
 		{
-			System.err.println(e.getMessage());
+			mGame.moveErrorTriggered(e.getMessage());
 		}
 
 	}

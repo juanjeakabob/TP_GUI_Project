@@ -13,13 +13,8 @@ public class ConsoleView implements GameObserver {
 	{
 		mGame = g;
 		mConsoleController = c;
-	}
-	
-	public void showMenu(Counter turn)
-	{
-		System.out.println(""); //Skip one line
-		System.out.println(turn + " to move"); //Show the current turn
-		System.out.print("Please enter a command: ");
+		
+		g.addObserver(this);
 	}
 	
 	//Print into the screen the board
@@ -27,12 +22,19 @@ public class ConsoleView implements GameObserver {
 	{
 		System.out.println(mGame);
 	}
+	
+	//Print into the screen the board
+	public void printBoardWithTurn(ReadOnlyBoard mGame, Counter turn)
+	{
+		System.out.println(mGame);
+		System.out.println(""); //Skip one line
+		System.out.println(turn + " to move"); //Show the current turn
+	}
 
 	@Override
-	public void moveExecFinished(ReadOnlyBoard board, Counter player,
-			Counter nextPlayer) {
-		// TODO Auto-generated method stub
-
+	public void moveExecFinished(ReadOnlyBoard board, Counter player, Counter nextPlayer)
+	{
+		printBoardWithTurn(board, nextPlayer);
 	}
 
 	@Override
@@ -42,7 +44,8 @@ public class ConsoleView implements GameObserver {
 	}
 
 	@Override
-	public void onGameOver(ReadOnlyBoard board, Counter winner) {
+	public void onGameOver(ReadOnlyBoard board, Counter winner)
+	{
 		printBoard(board);
 		
 		if(winner == Counter.EMPTY)
@@ -56,28 +59,26 @@ public class ConsoleView implements GameObserver {
 	}
 
 	@Override
-	public void onMoveError() {
-		// TODO Auto-generated method stub
-
+	public void onMoveError(String msg) 
+	{
+		System.err.println(msg);
 	}
 
 	@Override
 	public void onUndo(ReadOnlyBoard board, Counter nextPlayer,
 			boolean undoPossible) {
-		// TODO Auto-generated method stub
-
+		printBoardWithTurn(board, nextPlayer);
 	}
 
 	@Override
 	public void onUndoNotPossible() {
-		// TODO Auto-generated method stub
-
+		System.err.println("Nothing to undo.");
 	}
 
 	@Override
 	public void reset(ReadOnlyBoard board, Counter player, Boolean undoPossible) {
-		// TODO Auto-generated method stub
-
+		System.out.println("Game restarted");
+		printBoardWithTurn(board, player);
 	}
 
 }
