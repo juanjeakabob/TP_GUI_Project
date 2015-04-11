@@ -24,7 +24,7 @@ public class Main {
 		{
 			//Default
 			GameTypeFactory c4Fact = new Connect4Factory();
-			control = new ConsoleController(c4Fact, new Game(c4Fact.createRules()));
+			control = new WindowController(c4Fact, new Game(c4Fact.createRules()));
 		}
 		
 		//Run the game until the user exit or the game finish

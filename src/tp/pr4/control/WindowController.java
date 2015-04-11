@@ -3,6 +3,7 @@ package tp.pr4.control;
 import java.util.Scanner;
 
 import tp.pr4.logic.Game;
+import tp.pr4.views.window.MainWindow;
 
 public class WindowController extends Controller {
 
@@ -13,7 +14,12 @@ public class WindowController extends Controller {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		MainWindow view = new MainWindow(mGame, this);
+		
+		while(true)
+		{
+			
+		}
 		
 	}
 
