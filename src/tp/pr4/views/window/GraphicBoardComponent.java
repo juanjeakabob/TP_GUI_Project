@@ -3,10 +3,13 @@ package tp.pr4.views.window;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JComponent;
 
 import tp.pr4.logic.Counter;
+import tp.pr4.logic.ReadOnlyBoard;
 
 /**
  * Code of this class is a modified version of BoardComponent example given and created by Samir Genaim
@@ -45,7 +48,7 @@ public class GraphicBoardComponent extends JComponent {
 
 	private void initGUI() {
 
-		/*addMouseListener(new MouseListener() {
+		addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -73,10 +76,10 @@ public class GraphicBoardComponent extends JComponent {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Mouse Clicked:: " + "(" + e.getX() + ","
-						+ e.getY() + ")");
+				System.out.println("Mouse Clicked:: " + "(" + e.getX() / mCellWidth + ","
+						+ e.getY() / mCellHeight + ")");
 			}
-		});*/
+		});
 		
 		this.setSize(new Dimension(rows * mCellHeight, cols * mCellWidth));
 		repaint();
@@ -115,6 +118,17 @@ public class GraphicBoardComponent extends JComponent {
 	public void setBoardSize(int rows, int cols) {
 		initBoard(rows, cols);
 		repaint();
+	}
+	
+	public void setBoardToRender(ReadOnlyBoard board)
+	{
+		for(int i = 0; i < board.getHeight(); i++)
+		{
+			for(int j = 0; j < board.getWidth(); j++)
+			{
+				mBoard[i][j] = board.getPosition(j,  i);
+			}
+		}
 	}
 	
 	private Color counterToColor(Counter c)

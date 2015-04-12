@@ -27,6 +27,10 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 	private JPanel mainPanel, bottomPanel, rightPanel, gamePanel, changeGamePanel,centerPanel, turnPanel;
 	//Buttons of the GUI
 	private JButton randomMoveButton, exitButton, undoButton, resetButton, changeButton;
+	//Graphic board
+	GraphicBoardComponent graphicBoard;
+	//Labels
+	JLabel turnLabel;
 	
 	private void initGUI()
 	{
@@ -112,8 +116,9 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		centerPanel.setBackground(Color.BLACK);		
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		
-		GraphicBoardComponent g = new GraphicBoardComponent(10, 10);
-		centerPanel.add(g, BorderLayout.CENTER);
+		graphicBoard = new GraphicBoardComponent(10, 10);
+		graphicBoard.setPreferredSize(new Dimension(centerPanel.getWidth(), centerPanel.getHeight() - centerPanel.getHeight() / 12));
+		centerPanel.add(graphicBoard, BorderLayout.CENTER);
 		
 		turnPanel = new JPanel();
 		turnPanel.setSize(new Dimension(centerPanel.getWidth(), centerPanel.getHeight() / 12));
@@ -121,13 +126,17 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		turnPanel.setBackground(Color.white);		
 		centerPanel.add(turnPanel, BorderLayout.PAGE_END);
 		
+		turnLabel = new JLabel("");
+		turnPanel.add(turnLabel);
+		
 		this.setVisible(true);
 	}
 
 	@Override
 	public void moveExecFinished(ReadOnlyBoard board, Counter player,
 			Counter nextPlayer) {
-		// TODO Auto-generated method stub
+		graphicBoard.setBoardToRender(board);
+		turnLabel.setText(nextPlayer.toString());
 
 	}
 
@@ -164,7 +173,17 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 
 	@Override
 	public void reset(ReadOnlyBoard board, Counter player, Boolean undoPossible) {
-		// TODO Auto-generated method stub
+		graphicBoard.setBoardSize(board.getHeight(), board.getWidth());
+		graphicBoard.setBoardToRender(board);
+		
+		if(!undoPossible)
+		{
+			undoButton.setEnabled(false);
+		}
+		else
+		{
+			undoButton.setEnabled(true);
+		}
 
 	}
 
