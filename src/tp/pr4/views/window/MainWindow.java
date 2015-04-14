@@ -1,6 +1,8 @@
 package tp.pr4.views.window;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -10,7 +12,7 @@ import tp.pr4.control.WindowController;;
 
 public class MainWindow extends javax.swing.JFrame implements GameObserver {
 	
-	private WindowController mConsoleController;
+	private WindowController mWindowController;
 	private Observable<GameObserver> mGame;
 	
 	public MainWindow(Observable<GameObserver> g, WindowController c)
@@ -18,9 +20,11 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		super("Project 4");
 		
 		mGame = g;
-		mConsoleController = c;
+		mWindowController = c;
 		
 		initGUI();
+		
+		g.addObserver(this);
 	}
 	
 	//Panels of the GUI
@@ -30,7 +34,9 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 	//Graphic board
 	GraphicBoardComponent graphicBoard;
 	//Labels
-	JLabel turnLabel;
+	JLabel turnLabel, colsLabel, rowsLabel;
+	//Text fields
+	JTextField colsTextArea, rowsTextArea;
 	
 	private void initGUI()
 	{
@@ -52,6 +58,15 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		
 		randomMoveButton = new JButton("Random Move");
 		randomMoveButton.setPreferredSize(new Dimension(180, 55));
+		randomMoveButton.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mWindowController.GUImakeRandomMove();				
+			}
+			
+		});
 		bottomPanel.add(randomMoveButton);
 		
 		exitButton = new JButton("Exit");
@@ -79,14 +94,33 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		
 		undoButton = new JButton("Undo");
 		undoButton.setPreferredSize(new Dimension(90, 85));
+		undoButton.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mWindowController.GUImakeUndo();				
+			}
+			
+		});
 		gamePanel.add(undoButton);
 		
 		resetButton = new JButton("Reset");
 		resetButton.setPreferredSize(new Dimension(90, 85));
+		resetButton.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mWindowController.GUImakeReset();				
+			}
+			
+		});
 		gamePanel.add(resetButton);	
 		
 		//ChangeGame Panel
 		changeGamePanel = new JPanel();
+		changeGamePanel.setLayout(new BoxLayout(changeGamePanel, BoxLayout.Y_AXIS));
 
 		changeGamePanel.setSize(new Dimension(rightPanel.getWidth(), rightPanel.getHeight() / 2));
 		changeGamePanel.setPreferredSize(new Dimension(rightPanel.getWidth(), rightPanel.getHeight() / 2));
@@ -94,29 +128,90 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		changeGamePanel.setBorder(BorderFactory.createTitledBorder(rightPanelsBorder, "Change game"));
 		rightPanel.add(changeGamePanel, BorderLayout.PAGE_END);
 		
-		JComboBox<String> gamesList;
+		final JComboBox<String> gamesList;
 		String gamesNames[] = {"Connect-4", "Complica", "Gravity"};
 		gamesList = new JComboBox<String>(gamesNames);
 		gamesList.setSelectedIndex(0);
 		gamesList.setSize(changeGamePanel.getWidth(), 10);
 		gamesList.setPreferredSize(new Dimension(changeGamePanel.getWidth() - 25, 25));
-		changeGamePanel.add(gamesList);
+		gamesList.setAlignmentX(Component.CENTER_ALIGNMENT);
+		gamesList.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(gamesList.getSelectedIndex() == 2)
+				{
+					colsLabel.setVisible(true);
+					colsTextArea.setVisible(true);	
+					rowsLabel.setVisible(true);
+					rowsTextArea.setVisible(true);
+				}
+				else
+				{
+					colsLabel.setVisible(false);
+					colsTextArea.setVisible(false);	
+					rowsLabel.setVisible(false);
+					rowsTextArea.setVisible(false);
+				}
+			}
+			
+		});
 		
 		changeButton = new JButton("Change");
 		changeButton.setPreferredSize(new Dimension(90, 45));
 		changeButton.setLocation(changeGamePanel.getWidth() - 25, changeGamePanel.getHeight() - 25);
-		changeGamePanel.add(changeButton);	
-		
+		changeButton.addActionListener(new ActionListener()
+		{
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//mWindowController.GUImakeChangeGame(gamesList.getSelectedIndex());				
+			}
+			
+		});
+		
+		JPanel listButtonPanel = new JPanel();
+		listButtonPanel.setBackground(Color.LIGHT_GRAY)
+		;
+
+		listButtonPanel.add(gamesList);
+		listButtonPanel.add(changeButton);
+		
+		listButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		changeGamePanel.add(listButtonPanel);
+		
+		JPanel crNumberPanel = new JPanel();
+		crNumberPanel.setBackground(Color.LIGHT_GRAY);
+		colsLabel = new JLabel("Columns");
+		colsLabel.setVisible(false);
+		
+		colsTextArea = new JTextField(5);
+		colsTextArea.setVisible(false);
+		colsTextArea.setSize(100,  100);
+		
+		rowsLabel = new JLabel("Rows");
+		rowsLabel.setVisible(false);
+		
+		rowsTextArea = new JTextField(5);
+		rowsTextArea.setVisible(false);
+		
+		crNumberPanel.add(colsLabel);
+		crNumberPanel.add(colsTextArea);		
+		crNumberPanel.add(rowsLabel);
+		crNumberPanel.add(rowsTextArea);
+		
+		crNumberPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		changeGamePanel.add(crNumberPanel);
 		
 		//Center Panel
 		centerPanel = new JPanel(new BorderLayout());
 		centerPanel.setSize(new Dimension(this.getWidth() / 2, this.getHeight() - bottomPanel.getHeight()));
 		centerPanel.setPreferredSize(new Dimension(this.getWidth() / 2, this.getHeight() - bottomPanel.getHeight()));
-		centerPanel.setBackground(Color.BLACK);		
+		centerPanel.setBackground(Color.LIGHT_GRAY);		
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		
-		graphicBoard = new GraphicBoardComponent(10, 10);
+		graphicBoard = new GraphicBoardComponent(10, 10, mWindowController);
 		graphicBoard.setPreferredSize(new Dimension(centerPanel.getWidth(), centerPanel.getHeight() - centerPanel.getHeight() / 12));
 		centerPanel.add(graphicBoard, BorderLayout.CENTER);
 		
@@ -137,7 +232,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 			Counter nextPlayer) {
 		graphicBoard.setBoardToRender(board);
 		turnLabel.setText(nextPlayer.toString());
-
+		undoButton.setEnabled(true);
 	}
 
 	@Override
@@ -148,7 +243,8 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 
 	@Override
 	public void onGameOver(ReadOnlyBoard board, Counter winner) {
-		// TODO Auto-generated method stub
+		undoButton.setEnabled(false);
+		randomMoveButton.setEnabled(false);
 
 	}
 
@@ -161,8 +257,18 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 	@Override
 	public void onUndo(ReadOnlyBoard board, Counter nextPlayer,
 			boolean undoPossible) {
-		// TODO Auto-generated method stub
-
+		
+		graphicBoard.setBoardToRender(board);
+		turnLabel.setText(nextPlayer.toString());
+		
+		if(undoPossible)
+		{
+			undoButton.setEnabled(true);
+		}
+		else
+		{
+			undoButton.setEnabled(false);
+		}
 	}
 
 	@Override
@@ -175,6 +281,8 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 	public void reset(ReadOnlyBoard board, Counter player, Boolean undoPossible) {
 		graphicBoard.setBoardSize(board.getHeight(), board.getWidth());
 		graphicBoard.setBoardToRender(board);
+		
+		turnLabel.setText(player.toString());
 		
 		if(!undoPossible)
 		{

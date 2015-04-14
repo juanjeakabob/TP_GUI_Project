@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JComponent;
 
+import tp.pr4.control.WindowController;
 import tp.pr4.logic.Counter;
 import tp.pr4.logic.ReadOnlyBoard;
 
@@ -24,10 +25,13 @@ public class GraphicBoardComponent extends JComponent {
 	private int rows;
 	private int cols;
 	private Counter[][] mBoard;
+	
+	private WindowController mController;
 
-	public GraphicBoardComponent(int rows, int cols) {
+	public GraphicBoardComponent(int rows, int cols, WindowController c) {
 		mCellHeight = 50;
 		mCellWidth = 50;
+		mController = c;
 		
 		initBoard(rows, cols);
 		initGUI();
@@ -52,32 +56,24 @@ public class GraphicBoardComponent extends JComponent {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				System.out.println("Mouse Released: " + "(" + e.getX() + ","
-						+ e.getY() + ")");
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				System.out.println("Mouse Pressed: " + "(" + e.getX() + ","
-						+ e.getY() + ")");
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				System.out.println("Mouse Exited Component: " + "(" + e.getX()
-						+ "," + e.getY() + ")");
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				System.out.println("Mouse Entered Component: " + "(" + e.getX()
-						+ "," + e.getY() + ")");
+				
 			}
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Mouse Clicked:: " + "(" + e.getX() / mCellWidth + ","
-						+ e.getY() / mCellHeight + ")");
+				mController.GUImakeMove((e.getX() / mCellWidth) + 1, (e.getY() / mCellHeight) + 1);
 			}
 		});
 		
@@ -122,13 +118,15 @@ public class GraphicBoardComponent extends JComponent {
 	
 	public void setBoardToRender(ReadOnlyBoard board)
 	{
-		for(int i = 0; i < board.getHeight(); i++)
+		for(int i = 1; i < board.getHeight() + 1; i++)
 		{
-			for(int j = 0; j < board.getWidth(); j++)
+			for(int j = 1; j < board.getWidth() + 1; j++)
 			{
-				mBoard[i][j] = board.getPosition(j,  i);
+				mBoard[i - 1][j - 1] = board.getPosition(j,  i);
 			}
 		}
+		
+		this.repaint();
 	}
 	
 	private Color counterToColor(Counter c)

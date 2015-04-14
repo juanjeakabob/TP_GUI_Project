@@ -42,4 +42,18 @@ public class ComplicaFactory implements GameTypeFactory {
 		return new ComplicaRules();
 	}
 
+	@Override
+	public Player createHumanPlayerAtGUI(final int col, final int row) {
+		//Create an anonymous class that implements Player
+				Player pl = new Player()
+				{					
+					public Move getMove(Board board, Counter colour)
+					{
+						return createMove(col, row, colour);
+					}
+				};
+				
+				return pl;
+	}
+
 }

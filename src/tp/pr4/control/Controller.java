@@ -39,15 +39,6 @@ public abstract class Controller {
 		{
 			mGame.executeMove(newMove);
 			
-			if(mGame.getWinner() != Counter.EMPTY)
-			{
-				System.out.println("Game over. " + mGame.getTurn() + " wins");
-			}
-			else if(mGame.isFinished())
-			{
-				System.out.println("Game over. Game ended in a draw" );
-			}
-			
 		}catch(InvalidMove e)
 		{
 			mGame.moveErrorTriggered(e.getMessage());

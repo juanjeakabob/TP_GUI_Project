@@ -38,6 +38,20 @@ public class GravityFactory implements GameTypeFactory
 		return pl;
 	}
 	
+	@Override
+	public Player createHumanPlayerAtGUI(final int col, final int row) {
+		//Create an anonymous class that implements Player
+				Player pl = new Player()
+				{					
+					public Move getMove(Board board, Counter colour)
+					{
+						return createMove(col, row, colour);
+					}
+				};
+				
+				return pl;
+	}
+	
 	public Move createMove(int col, int row, Counter colour)
 	{
 		return new GravityMove(col, row, colour);

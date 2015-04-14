@@ -11,9 +11,11 @@ public class Main {
 	static private boolean helpDisplayed;
 	
 	public static void main(String[] args) {
-		
+		//TODO CAMBIAR ESTO
 		Controller control;
 		helpDisplayed = false;
+		
+		Game g = null;
 		
 		if(args.length != 0)
 		{
@@ -24,13 +26,16 @@ public class Main {
 		{
 			//Default
 			GameTypeFactory c4Fact = new Connect4Factory();
-			control = new WindowController(c4Fact, new Game(c4Fact.createRules()));
+			g = new Game(c4Fact.createRules());
+			control = new WindowController(c4Fact, g);
 		}
 		
 		//Run the game until the user exit or the game finish
 		if(control != null)
 		{
 			control.run();
+			GameTypeFactory c4Fact = new Connect4Factory();
+			new ConsoleController(c4Fact, g).run();
 			
 			System.out.println("Closing the game...");			
 			System.exit(0);
