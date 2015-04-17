@@ -85,6 +85,8 @@ public class Game implements Observable<GameObserver>{
 		{
 			o.reset(mBoard, mTurn, false);
 		}
+		
+		mFinished = false;
 	}
 
 	//Goes to the next turn
@@ -176,10 +178,10 @@ public class Game implements Observable<GameObserver>{
 			
 			nextTurn(); //After undo the turn should change
 			
-			//Notify correct undo
+			//Notify correct undo. Send the status of the queue (if its empty we pass false to undo possible)
 			for(GameObserver o: mObserversList)
 			{
-				o.onUndo(mBoard, getTurn(), true);
+				o.onUndo(mBoard, getTurn(), !mUndoStack.isEmpty());
 			}
 			
 			correctUndo = true;

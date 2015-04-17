@@ -64,10 +64,7 @@ public class ConsoleController extends Controller {
 			}
 			break;
 		case "undo":
-			if(!mGame.undo())
-			{
-				System.err.println("Nothing to undo.");
-			}
+			mGame.undo();
 			break;
 		case "restart":
 			mGame.reset(mGameFactory.createRules()); //Reset the game according to the current rules

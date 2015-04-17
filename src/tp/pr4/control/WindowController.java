@@ -14,9 +14,7 @@ public class WindowController extends Controller {
 
 	@Override
 	public void run() {
-		MainWindow view = new MainWindow(mGame, this);
-		
-		
+		MainWindow view = new MainWindow(mGame, this);		
 	}
 	
 	public void GUImakeMove(int col, int row)

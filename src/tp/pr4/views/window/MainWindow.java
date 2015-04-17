@@ -3,10 +3,12 @@ package tp.pr4.views.window;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import tp.pr4.Main;
 import tp.pr4.logic.*;
 import tp.pr4.control.WindowController;;
 
@@ -50,6 +52,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		mainPanel.setBackground(Color.LIGHT_GRAY);		
 		this.setContentPane(mainPanel);
 		
+
 		//Bottom Panel
 		bottomPanel = new JPanel();
 		bottomPanel.setSize(new Dimension(this.getWidth(), 65));
@@ -67,10 +70,23 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 			}
 			
 		});
+		randomMoveButton.setIcon(new ImageIcon(Main.class.getResource("Icons/random.png")));
 		bottomPanel.add(randomMoveButton);
 		
 		exitButton = new JButton("Exit");
-		exitButton.setPreferredSize(new Dimension(90, 55));
+		exitButton.setPreferredSize(new Dimension(180, 55));
+		final JFrame currentFrame = this;
+		exitButton.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Send a closing event to the frame
+				currentFrame.dispatchEvent(new WindowEvent(currentFrame, WindowEvent.WINDOW_CLOSING));
+			}
+			
+		});
+		exitButton.setIcon(new ImageIcon(Main.class.getResource("Icons/exit.png")));
 		bottomPanel.add(exitButton);		
 		
 		mainPanel.add(bottomPanel, BorderLayout.PAGE_END);
@@ -93,7 +109,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		rightPanel.add(gamePanel, BorderLayout.CENTER);
 		
 		undoButton = new JButton("Undo");
-		undoButton.setPreferredSize(new Dimension(90, 85));
+		undoButton.setPreferredSize(new Dimension(180, 55));
 		undoButton.addActionListener(new ActionListener()
 		{
 
@@ -103,10 +119,11 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 			}
 			
 		});
+		undoButton.setIcon(new ImageIcon(Main.class.getResource("Icons/undo.png")));
 		gamePanel.add(undoButton);
 		
 		resetButton = new JButton("Reset");
-		resetButton.setPreferredSize(new Dimension(90, 85));
+		resetButton.setPreferredSize(new Dimension(180, 55));
 		resetButton.addActionListener(new ActionListener()
 		{
 
@@ -116,6 +133,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 			}
 			
 		});
+		resetButton.setIcon(new ImageIcon(Main.class.getResource("Icons/reset.png")));
 		gamePanel.add(resetButton);	
 		
 		//ChangeGame Panel
@@ -159,17 +177,33 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		});
 		
 		changeButton = new JButton("Change");
-		changeButton.setPreferredSize(new Dimension(90, 45));
+		changeButton.setPreferredSize(new Dimension(180, 45));
 		changeButton.setLocation(changeGamePanel.getWidth() - 25, changeGamePanel.getHeight() - 25);
 		changeButton.addActionListener(new ActionListener()
 		{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//mWindowController.GUImakeChangeGame(gamesList.getSelectedIndex());				
+				//Get the text inside the text areas
+				String colsS = colsTextArea.getText();
+				String rowsS = rowsTextArea.getText();
+				int cols = 0;
+				int rows = 0;
+				//If the user wrote something modify the cols and rows
+				if((!colsS.equals("")) && (!rowsS.equals("")))
+				{
+					cols = Integer.parseInt(colsS);
+					rows = Integer.parseInt(rowsS);
+				}
+				//Tell the controller
+				mWindowController.GUImakeChangeGame(gamesList.getSelectedIndex(), cols, rows);
+				
+				colsTextArea.setText("");
+				rowsTextArea.setText("");
 			}
 			
 		});
+		changeButton.setIcon(new ImageIcon(Main.class.getResource("Icons/check.png")));
 		
 		JPanel listButtonPanel = new JPanel();
 		listButtonPanel.setBackground(Color.LIGHT_GRAY)
@@ -215,10 +249,14 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		graphicBoard.setPreferredSize(new Dimension(centerPanel.getWidth(), centerPanel.getHeight() - centerPanel.getHeight() / 12));
 		centerPanel.add(graphicBoard, BorderLayout.CENTER);
 		
+		//Border
+		Border bottomPanelsBorder = BorderFactory.createRaisedBevelBorder();
+		//turn panel
 		turnPanel = new JPanel();
 		turnPanel.setSize(new Dimension(centerPanel.getWidth(), centerPanel.getHeight() / 12));
 		turnPanel.setPreferredSize(new Dimension(centerPanel.getWidth(), centerPanel.getHeight() / 12));
-		turnPanel.setBackground(Color.white);		
+		turnPanel.setBackground(Color.LIGHT_GRAY);
+		turnPanel.setBorder(bottomPanelsBorder);
 		centerPanel.add(turnPanel, BorderLayout.PAGE_END);
 		
 		turnLabel = new JLabel("");
@@ -245,13 +283,31 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 	public void onGameOver(ReadOnlyBoard board, Counter winner) {
 		undoButton.setEnabled(false);
 		randomMoveButton.setEnabled(false);
+		
+		int n;
+		if(winner != Counter.EMPTY)
+		{
+			n = JOptionPane.showOptionDialog(this, winner.toString() + " player has won. Would you like to quit?", winner + " won!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+		}
+		else
+		{
+			n = JOptionPane.showOptionDialog(this, "It's a draw. Would you like to quit?", "It's a draw!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+		}
+		
+		if(n == 0)
+		{
+			//Send a closing event to the frame
+			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		}
+		else
+		{
+		}
 
 	}
 
 	@Override
 	public void onMoveError(String msg) {
-		// TODO Auto-generated method stub
-
+		JOptionPane.showMessageDialog(this, "Invalid move!", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
@@ -273,8 +329,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 
 	@Override
 	public void onUndoNotPossible() {
-		// TODO Auto-generated method stub
-
+		JOptionPane.showMessageDialog(this, "Nothing to undo!", "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
@@ -284,6 +339,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		
 		turnLabel.setText(player.toString());
 		
+		//Activate buttons
 		if(!undoPossible)
 		{
 			undoButton.setEnabled(false);
@@ -292,6 +348,8 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		{
 			undoButton.setEnabled(true);
 		}
+		
+		randomMoveButton.setEnabled(true);
 
 	}
 
