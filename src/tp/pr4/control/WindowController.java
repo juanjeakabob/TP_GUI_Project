@@ -7,6 +7,8 @@ import tp.pr4.views.window.MainWindow;
 
 public class WindowController extends Controller {
 
+	private volatile boolean isRunning = true;
+	
 	public WindowController(GameTypeFactory factory, Game g) {
 		mGame = g;
 		mGameFactory = factory;
@@ -14,9 +16,16 @@ public class WindowController extends Controller {
 
 	@Override
 	public void run() {
+		//Create the view
 		MainWindow view = new MainWindow(mGame, this);		
+		
+		//Empty loop
+		while(isRunning)
+		{
+		}
 	}
 	
+	//Called by the view.
 	public void GUImakeMove(int col, int row)
 	{
 		mWhitePlayer = mGameFactory.createHumanPlayerAtGUI(col, row);
@@ -24,17 +33,17 @@ public class WindowController extends Controller {
 		
 		makeMove();
 	}
-	
+	//Called by the view.
 	public void GUImakeUndo()
 	{
 		mGame.undo();
 	}
-	
+	//Called by the view.
 	public void GUImakeReset()
 	{
 		mGame.reset(mGameFactory.createRules());
 	}
-	
+	//Called by the view.
 	public void GUImakeRandomMove()
 	{
 		mWhitePlayer = mGameFactory.createRandomPlayer();
@@ -42,7 +51,7 @@ public class WindowController extends Controller {
 		
 		makeMove();
 	}
-	
+	//Called by the view.
 	public void GUImakeChangeGame(int game, int cols, int rows)
 	{
 		switch(game)
@@ -64,6 +73,11 @@ public class WindowController extends Controller {
 				break;
 		}
 		
+	}
+	//Called by the view.
+	public void GUImakeExit()
+	{
+		isRunning = false;
 	}
 
 }

@@ -82,6 +82,7 @@ public class ConsoleController extends Controller {
 		}
 	}
 	
+	//Handles the input from the user when he introduce the command player
 	private boolean handlePlayerEvent(String[] words)
 	{
 		boolean valid = false;
@@ -93,7 +94,7 @@ public class ConsoleController extends Controller {
 			switch(words[1])
 			{
 			case "white":
-				
+				//Handle second cases
 				switch(words[2])
 				{
 				case "human":
@@ -108,7 +109,7 @@ public class ConsoleController extends Controller {
 				
 			break;
 			case "black":
-				
+				//Handle second cases
 				switch(words[2])
 				{
 				case "human":
@@ -128,6 +129,7 @@ public class ConsoleController extends Controller {
 		return valid;
 	}
 
+	//Handles the input from the user when he introduce the command play
 	private boolean handlePlayEvent(String[] words)
 	{
 		boolean valid = false;
@@ -210,11 +212,12 @@ public class ConsoleController extends Controller {
 		//Run until the game is finished
 		while(!mGame.isFinished())
 		{			
-			//Show the menu and wait for input
+			//Show the menu
 			showMenu(mGame.getTurn());
 			
+			 //Handle the user input
 			String command = in.nextLine();
-			handleCommand(command); //Handle the user input
+			handleCommand(command);
 		}
 	}
 }

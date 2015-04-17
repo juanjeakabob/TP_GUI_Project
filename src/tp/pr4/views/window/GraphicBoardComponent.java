@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JComponent;
 
@@ -77,7 +78,26 @@ public class GraphicBoardComponent extends JComponent {
 			}
 		});
 		
+		GraphicBoardComponent me = this;
+		addMouseMotionListener( new MouseMotionListener()
+		{
+
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent arg0) {
+				me.setToolTipText("Column:" + ((arg0.getX() / mCellWidth) + 1) + " Row: " + (arg0.getY() / mCellHeight + 1));
+				
+			}
+			
+		});
+		
 		this.setSize(new Dimension(rows * mCellHeight, cols * mCellWidth));
+		this.setToolTipText(null);
 		repaint();
 	}
 

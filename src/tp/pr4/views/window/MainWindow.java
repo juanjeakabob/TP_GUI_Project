@@ -29,6 +29,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		g.addObserver(this);
 	}
 	
+	//GUI COMPONENTS--------------------------------------------------------------------------------------------------------------
 	//Panels of the GUI
 	private JPanel mainPanel, bottomPanel, rightPanel, gamePanel, changeGamePanel,centerPanel, turnPanel;
 	//Buttons of the GUI
@@ -39,6 +40,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 	JLabel turnLabel, colsLabel, rowsLabel;
 	//Text fields
 	JTextField colsTextArea, rowsTextArea;
+	//------------------------------------------------------------------------------------------------------------------------------
 	
 	private void initGUI()
 	{
@@ -116,7 +118,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		changeGamePanel.setBorder(BorderFactory.createTitledBorder(rightPanelsBorder, "Change game"));
 		rightPanel.add(changeGamePanel, BorderLayout.PAGE_END);
 		//Combo box with different games list
-		final JComboBox<String> gamesList;
+		JComboBox<String> gamesList;
 		String gamesNames[] = {"Connect-4", "Complica", "Gravity"};
 		gamesList = new JComboBox<String>(gamesNames);
 		gamesList.setSelectedIndex(0);
@@ -241,8 +243,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Send a closing event to the frame
-				currentFrame.dispatchEvent(new WindowEvent(currentFrame, WindowEvent.WINDOW_CLOSING));
+				mWindowController.GUImakeExit();
 			}
 			
 		});
@@ -281,8 +282,8 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 	
 
 	@Override
-	public void moveExecFinished(ReadOnlyBoard board, Counter player,
-			Counter nextPlayer) {
+	public void moveExecFinished(ReadOnlyBoard board, Counter player, Counter nextPlayer) {
+		//Update board, turn and undo button
 		graphicBoard.setBoardToRender(board);
 		turnLabel.setText(nextPlayer.toString());
 		undoButton.setEnabled(true);
@@ -296,9 +297,11 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 
 	@Override
 	public void onGameOver(ReadOnlyBoard board, Counter winner) {
+		//Disable the buttons
 		undoButton.setEnabled(false);
 		randomMoveButton.setEnabled(false);
 		
+		//Pop a meesage to the user. 
 		int n;
 		if(winner != Counter.EMPTY)
 		{
@@ -309,10 +312,11 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 			n = JOptionPane.showOptionDialog(this, "It's a draw. Would you like to quit?", "It's a draw!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 		}
 		
+		//If the suer wants to exit jsut exit
 		if(n == 0)
 		{
-			//Send a closing event to the frame
-			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+			//Tell the controller to exit
+			mWindowController.GUImakeExit();
 		}
 		else
 		{
@@ -322,16 +326,17 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 
 	@Override
 	public void onMoveError(String msg) {
-		JOptionPane.showMessageDialog(this, "Invalid move!", "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
 	public void onUndo(ReadOnlyBoard board, Counter nextPlayer,
 			boolean undoPossible) {
 		
+		//Update the board and the turn
 		graphicBoard.setBoardToRender(board);
 		turnLabel.setText(nextPlayer.toString());
-		
+		//Update buttons
 		if(undoPossible)
 		{
 			undoButton.setEnabled(true);
@@ -349,9 +354,10 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 
 	@Override
 	public void reset(ReadOnlyBoard board, Counter player, Boolean undoPossible) {
+		//Reset the board
 		graphicBoard.setBoardSize(board.getHeight(), board.getWidth());
 		graphicBoard.setBoardToRender(board);
-		
+		//Reset the player turn
 		turnLabel.setText(player.toString());
 		
 		//Activate buttons
