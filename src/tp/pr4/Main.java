@@ -5,6 +5,8 @@ import tp.pr4.logic.*;
 
 import java.util.Scanner;
 
+//TODO HACER QUE GRAPHICBOARDCOMPONENT SEA UN LISTENER DE GAME Y QUE IMPLEMENTE LAS FUNCIONES.
+
 public class Main {
 	
 	//Set to true if user asked for help by argument
