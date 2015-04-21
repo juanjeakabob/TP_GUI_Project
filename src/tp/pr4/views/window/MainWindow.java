@@ -118,7 +118,7 @@ public class MainWindow extends javax.swing.JFrame implements GameObserver {
 		changeGamePanel.setBorder(BorderFactory.createTitledBorder(rightPanelsBorder, "Change game"));
 		rightPanel.add(changeGamePanel, BorderLayout.PAGE_END);
 		//Combo box with different games list
-		JComboBox<String> gamesList;
+		final JComboBox<String> gamesList;
 		String gamesNames[] = {"Connect-4", "Complica", "Gravity"};
 		gamesList = new JComboBox<String>(gamesNames);
 		gamesList.setSelectedIndex(0);

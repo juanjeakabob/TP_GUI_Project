@@ -6,12 +6,10 @@ import tp.pr4.control.ConsoleController;
 public class ConsoleView implements GameObserver {
 	
 	private ConsoleController mConsoleController;
-	private Observable<GameObserver> mGame;
 	
 	
 	public ConsoleView(Observable<GameObserver> g, ConsoleController c)
 	{
-		mGame = g;
 		mConsoleController = c;
 		
 		g.addObserver(this);

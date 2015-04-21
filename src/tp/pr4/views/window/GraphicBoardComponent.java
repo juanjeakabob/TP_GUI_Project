@@ -38,6 +38,7 @@ public class GraphicBoardComponent extends JComponent {
 		initGUI();
 	}
 
+	//Init board to empty
 	private void initBoard(int rows, int cols) {
 		this.rows = rows;
 		this.cols = cols;
@@ -78,7 +79,7 @@ public class GraphicBoardComponent extends JComponent {
 			}
 		});
 		
-		GraphicBoardComponent me = this;
+		final GraphicBoardComponent me = this;
 		addMouseMotionListener( new MouseMotionListener()
 		{
 
